@@ -101,7 +101,7 @@ function Login() {
                 <div className="absolute -z-10 -translate-x-2/3 w-[300%] h-full py-3 rounded-full bg-primaryColor text-white bg-gradient-to-r from-[#00dbde] to-[#fc00ff]
                 bg-repeat-x transition-all duration-300 group-hover:translate-x-0">
                 </div>
-                <button type="submit" className="w-full py-3 rounded-full text-white font-semibold">
+                <button type="submit" className="w-full py-3 rounded-full text-white font-semibold outline-none">
                     ĐĂNG NHẬP
                 </button>
             </div>
