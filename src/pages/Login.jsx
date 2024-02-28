@@ -16,7 +16,7 @@ function Login() {
       const response = await fetch("http://localhost:5555/account/login", {
         method: "POST",
         headers: {
-          "Content-Type":"application/json"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           email,
@@ -41,9 +41,11 @@ function Login() {
 
   return (
     <div className="bg-[url('https://colorlib.com/etc/lf/Login_v4/images/bg-01.jpg')] h-screen bg-no-repeat bg-cover pt-20">
-      <div className={`fixed z-20 right-0 top-0 left-0 bottom-0 pt-10 bg-[#333333]/[.3] ${checkingAccount ? "block" : "hidden"}`}>
-        <p className="font-semibold text-2xl text-white text-center">Đang xác minh tài khoản...</p>
-      </div>
+      {checkingAccount && (
+        <div className="fixed z-20 right-0 top-0 left-0 bottom-0 pt-10 bg-[#333333]/[.3]">
+          <p className="font-semibold text-2xl text-white text-center">Đang xác minh tài khoản...</p>
+        </div>
+      )}
       <div className="bg-white min-h-fit w-96 mx-auto rounded-lg flex flex-col items-center pt-2 pb-12">
         <div className="">
           <img

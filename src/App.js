@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route, useLocation } from "react-router-dom"
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Majors from "./pages/Majors";
@@ -9,9 +9,11 @@ import Users from "./pages/Users";
 import Navbar from "./components/Navbar";
 
 function App() {
+  const { pathname } = useLocation();
+
   return (
     <div className="App">
-      <Navbar />
+      <Navbar currentPath={pathname}/>
       <Routes>
         <Route path="/login" element={<Login />}/>
         <Route path="/" element={<Dashboard />}/>

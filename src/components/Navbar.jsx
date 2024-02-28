@@ -3,86 +3,115 @@ import { Link } from "react-router-dom";
 import { FaRegBell } from "react-icons/fa";
 import { IoMdArrowDropdown } from "react-icons/io";
 
-const Navbar = () => {
+const Navbar = ({ currentPath }) => {
   const [isOpenUserModal, setIsOpenUserModal] = useState(false);
+  const [isOpenNotiModal, setIsOpenNotiModal] = useState(false);
   const userModalContainer = useRef();
+  const notiModalContainer = useRef();
+  const username = localStorage.getItem("username");
+  
   const handleOutsideClick = (e) => {
     if (userModalContainer.current && !userModalContainer.current.contains(e.target)) {
-        setIsOpenUserModal(false);
+      setIsOpenUserModal(false);
+    } 
+    if (notiModalContainer.current && !notiModalContainer.current.contains(e.target)) {
+      setIsOpenNotiModal(false);
     }
   }
 
   useEffect(() => {
     if (isOpenUserModal) {
-        document.addEventListener("click", handleOutsideClick)
+      document.addEventListener("click", handleOutsideClick);
     }
-
+    
+    if (isOpenNotiModal) {
+        document.addEventListener("click", handleOutsideClick);
+    }
+    
     return () => {
-        document.removeEventListener("click", handleOutsideClick)
+      document.removeEventListener("click", handleOutsideClick);
     }
-  },[isOpenUserModal])
-
-
-
+  },[isOpenUserModal, isOpenNotiModal])
+  
+  
+  
   return (
-    <div className="absolute z-10 left-0 top-0 right-0 bg-[#E9F2FF] h-16 shadow-md flex justify-between items-center px-8">
-      <div>
+    <div className="absolute z-10 left-0 top-0 right-0 bg-[#E9F2FF] h-16 shadow-md text-center flex justify-between items-center px-8">
+      <Link to="/">
         <img
           src="/img/logo-notext.png"
           alt="logo Stuto"
           className="w-16 object-cover"
         />
-      </div>
+      </Link>
       <div className="flex gap-1">
         <Link
-          className="px-4 leading-[4rem] font-semibold transition-all hover:text-primaryColor"
+          className={` px-4 leading-[4rem] font-semibold border-b-2 transition-all hover:text-primaryColor ${currentPath === '/' && "text-primaryColor border-b-[#918ee7]"}`}
           to="/"
         >
-          Dashboard
+          Tổng quát
         </Link>
         <Link
-          className="px-4 leading-[4rem] font-semibold transition-all hover:text-primaryColor"
+          className={` px-4 leading-[4rem] font-semibold border-b-2 transition-all hover:text-primaryColor ${currentPath === '/users' && "text-primaryColor border-b-[#918ee7]"}`}
           to="/users"
         >
-          Users
+          QL Người dùng
         </Link>
         <Link
-          className="px-4 leading-[4rem] font-semibold transition-all hover:text-primaryColor"
+          className={` px-4 leading-[4rem] font-semibold border-b-2 transition-all hover:text-primaryColor ${currentPath === '/majors' && "text-primaryColor border-b-[#918ee7]"}`}
           to="/majors"
         >
-          Majors
+          QL Chuyên ngành
         </Link>
         <Link
-          className="px-4 leading-[4rem] font-semibold transition-all hover:text-primaryColor"
+          className={` px-4 leading-[4rem] font-semibold border-b-2 transition-all hover:text-primaryColor ${currentPath === '/subjects' && "text-primaryColor border-b-[#918ee7]"}`}
           to="/subjects"
         >
-          Subjects
+          QL Môn học
         </Link>
         <Link
-          className="px-4 leading-[4rem] font-semibold transition-all hover:text-primaryColor"
+          className={` px-4 leading-[4rem] font-semibold border-b-2 transition-all hover:text-primaryColor ${currentPath === '/reports' && "text-primaryColor border-b-[#918ee7]"}`}
           to="/reports"
         >
-          Reports
+          Xử lý báo cáo
         </Link>
       </div>
       <div className="flex justify-between items-center gap-3">
-        <FaRegBell className="text-lg mr-2 cursor-pointer transition-all hover:text-primaryColor" />
+        <div
+          onClick={(e) => setIsOpenNotiModal(!isOpenNotiModal)}
+          className="relative w-8"
+          ref={notiModalContainer}
+        >
+          <FaRegBell className="text-lg mr-2 cursor-pointer transition-all hover:text-primaryColor" />
+          <ul
+            className={`absolute top-[150%] -right-8 w-60 bg-white rounded-lg shadow-sm overflow-hidden py-2 cursor-pointer ${
+              isOpenNotiModal ? "block" : "hidden"
+            }`}
+          >
+            <li className="truncate pl-4 py-3 pr-2 text-sm hover:text-white hover:bg-[#918ee7]">
+              Có 1 thông báo mới đến từ StuTo
+            </li>
+            <li className="truncate pl-4 py-3 pr-2 text-sm hover:text-white hover:bg-[#918ee7]">
+              Có 1 thông báo mới đến từ StuTo
+            </li>
+          </ul>
+        </div>
         <div className="h-8 border-2 border-l-gray-300"></div>
         <div
           onClick={(e) => setIsOpenUserModal(!isOpenUserModal)}
-          className="relative w-36 font-medium cursor-pointer group"
+          className="relative w-36 font-medium cursor-pointer"
           ref={userModalContainer}
         >
           <p className="flex gap-1 justify-center items-center leading-[4rem]">
-            Username <IoMdArrowDropdown />
+            {username} <IoMdArrowDropdown />
           </p>
           <ul
-            className={`absolute top-[80%] right-18 w-36 bg-white text-center rounded-lg shadow-sm overflow-hidden py-2 ${
+            className={`absolute top-[80%] right-0 w-36 bg-white text-center text-sm rounded-lg shadow-sm overflow-hidden py-2 font-normal ${
               isOpenUserModal ? "block" : "hidden"
             }`}
           >
             <li className="py-3 hover:text-white hover:bg-[#918ee7]">
-              Tùy chỉnh
+              Thêm admin
             </li>
             <li className="py-3 hover:text-white hover:bg-[#918ee7]">
               Đăng xuất
