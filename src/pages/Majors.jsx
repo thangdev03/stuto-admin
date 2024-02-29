@@ -128,13 +128,13 @@ const Majors = () => {
           <table className="w-full border-collapse text-center table-auto">
             <thead className="bg-primaryColor text-white">
               <tr>
-                <th className="">
+                <th className="w-10">
                   <input type="checkbox" className="h-4 w-4"/>
                 </th>
-                <th className="py-2">STT</th>
-                <th className="w-1/3 py-2">TÊN CHUYÊN NGÀNH</th>
+                <th className="w-20 py-2">STT</th>
+                <th className="py-2">TÊN CHUYÊN NGÀNH</th>
                 <th className="py-2">SỐ NGƯỜI THUỘC CHUYÊN NGÀNH</th>
-                <th className="py-2">Hành động</th>
+                <th className="w-1/5 py-2">Hành động</th>
               </tr>
             </thead>
             <tbody>

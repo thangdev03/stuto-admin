@@ -5,22 +5,22 @@ import LoadingSpinner from '../components/LoadingSpinner';
 
 const Subjects = () => {
   const [searchText, setSearchText] = useState("");
-  const [majorItem, setMajorItem] = useState({});
-  const [newMajorName, setNewMajorName] = useState("")
-  const [majors, setMajors] = useState([]);
+  const [subjectItem, setSubjectItem] = useState({});
+  const [newSubjectName, setNewSubjectName] = useState("")
+  const [subjects, setSubjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
   const handleCreate = async () => {
-    const response = await fetch("http://localhost:5555/major", {
+    const response = await fetch("http://localhost:5555/subject", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        name: newMajorName
+        name: newSubjectName
       })
     });
     const data = await response.json();
@@ -32,13 +32,13 @@ const Subjects = () => {
   }
 
   const handleEdit = async () => {
-    const response = await fetch(`http://localhost:5555/major/${majorItem._id}`, {
+    const response = await fetch(`http://localhost:5555/subject/${subjectItem._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        name: majorItem.name
+        name: subjectItem.name
       })
     });
     const data = await response.json();
@@ -52,7 +52,7 @@ const Subjects = () => {
   const handleDelete = async (id) => {
     const result = window.confirm("Bạn có chắc muốn xóa chuyên ngành này không?");
     if (result) {
-      const response = await fetch(`http://localhost:5555/major/${id}`, {
+      const response = await fetch(`http://localhost:5555/subject/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json"
@@ -69,9 +69,9 @@ const Subjects = () => {
   useEffect(() => {
     setIsSuccess(false)
     setIsLoading(true)
-    fetch("http://localhost:5555/major")
+    fetch("http://localhost:5555/subject")
       .then((response) => response.json())
-      .then((majorsData) => setMajors(majorsData.data))
+      .then((subjectsData) => setSubjects(subjectsData.data))
       .then(() => setIsLoading(false))
   }, [isSuccess])
     
@@ -88,13 +88,13 @@ const Subjects = () => {
         {isCreating && (
             <div className="fixed z-20 left-0 top-0 right-0 bottom-0 bg-gray-500/10 text-center">
               <div className="mx-auto my-10 w-fit min-h-40 py-4 px-6 bg-white rounded-lg">
-                <h1 className="font-semibold text-xl">Thêm mới chuyên ngành</h1>
+                <h1 className="font-semibold text-xl">Thêm mới môn học</h1>
                 <div className="mt-4 flex justify-center gap-1">
                   <span>Tên môn học:</span>
                   <input 
                     type="text" 
-                    value={newMajorName} 
-                    onChange={(e) => setNewMajorName(e.target.value)}
+                    value={newSubjectName} 
+                    onChange={(e) => setNewSubjectName(e.target.value)}
                     className="bg-primaryColor/20 px-2 rounded-md"
                   />
                 </div>
@@ -128,12 +128,12 @@ const Subjects = () => {
           <table className="w-full border-collapse text-center table-auto">
             <thead className="bg-primaryColor text-white">
               <tr>
-                <th className="">
+                <th className="w-10">
                   <input type="checkbox" className="h-4 w-4"/>
                 </th>
-                <th className="py-2">STT</th>
-                <th className="w-1/3 py-2">TÊN MÔN HỌC</th>
-                <th className="py-2">Hành động</th>
+                <th className="w-20 py-2">STT</th>
+                <th className="py-2">TÊN MÔN HỌC</th>
+                <th className="w-1/5 py-2">Hành động</th>
               </tr>
             </thead>
             <tbody>
@@ -144,24 +144,24 @@ const Subjects = () => {
                   </td>
                 </tr>
               ) : (
-                majors.map((major, index) => (
+                subjects.map((subject, index) => (
                   <tr 
                     key={index} 
-                    className={ !major.name.toLowerCase().includes(searchText.toLowerCase()) && "hidden" }
+                    className={ !subject.name.toLowerCase().includes(searchText.toLowerCase()) && "hidden" }
                   >
                     <td className="border-y border-primaryColor/40">
                       <input type="checkbox" id={`checkbox-${index}`} className="h-4 w-4"/>
                     </td>
                     <td className="border-y border-primaryColor/40">{index + 1}</td>
-                    <td className="border-y border-primaryColor/40">{major.name}</td>
+                    <td className="border-y border-primaryColor/40">{subject.name}</td>
                     <td className="border-y border-primaryColor/40">
                       <button className="p-2 mr-4">
                         <MdEdit className="text-xl" onClick={() => {
-                          setMajorItem(major);
+                          setSubjectItem(subject);
                           setIsEditing(true);
                         }}/>
                       </button>
-                      <button className="p-2" onClick={() => handleDelete(major._id)}>
+                      <button className="p-2" onClick={() => handleDelete(subject._id)}>
                         <MdDelete className="text-xl"/>
                       </button>
                     </td>
@@ -175,11 +175,11 @@ const Subjects = () => {
               <div className="mx-auto my-10 w-fit min-h-40 py-4 px-6 bg-white rounded-lg">
                 <h1 className="font-semibold text-xl">Sửa thông tin môn học</h1>
                 <div className="mt-4 flex justify-center gap-1">
-                  <span>Tên chuyên ngành:</span>
+                  <span>Tên môn học:</span>
                   <input 
                     type="text" 
-                    value={majorItem.name} 
-                    onChange={(e) => setMajorItem({ _id: majorItem._id, name: e.target.value })}
+                    value={subjectItem.name} 
+                    onChange={(e) => setSubjectItem({ _id: subjectItem._id, name: e.target.value })}
                     className="bg-primaryColor/20 px-2 rounded-md"
                   />
                 </div>
