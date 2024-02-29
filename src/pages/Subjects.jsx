@@ -133,7 +133,7 @@ const Subjects = () => {
                 </th>
                 <th className="w-20 py-2">STT</th>
                 <th className="py-2">TÊN MÔN HỌC</th>
-                <th className="w-1/5 py-2">Hành động</th>
+                <th className="w-1/5 py-2">HÀNH ĐỘNG</th>
               </tr>
             </thead>
             <tbody>
