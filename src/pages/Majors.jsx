@@ -145,7 +145,9 @@ const Majors = () => {
                   </td>
                 </tr>
               ) : (
-                majors.map((major, index) => (
+                majors
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((major, index) => (
                   <tr 
                     key={index} 
                     className={ !major.name.toLowerCase().includes(searchText.toLowerCase()) && "hidden" }

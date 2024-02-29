@@ -1,15 +1,51 @@
-import React, { useEffect, useState } from 'react'
-import { IoIosAddCircleOutline } from "react-icons/io";
-import { MdEdit, MdBlock, MdDelete } from "react-icons/md";
+import React, { useEffect, useState } from "react"
 import LoadingSpinner from '../components/LoadingSpinner';
+import { MdBlock, MdDelete } from "react-icons/md";
 import { BsDot } from "react-icons/bs";
+import { TbLock, TbLockOpenOff } from "react-icons/tb";
+
 
 const Users = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [users, setUsers] = useState([]);
+
+  const handleRestrict = async (userId, status) => {
+    const response = await fetch(`http://localhost:5555/account`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          update_restrict: true,
+          user_id: userId,
+          is_restricted: !status
+        })
+      });
+      const data = await response.json()
+      if (data) {
+        setIsSuccess(true)
+      }
+      // return alert(data.message)
+  }
+
+  const handleDelete = async (userId) => {
+    const confirm = window.confirm("Bạn có chắc muốn xóa vĩnh viễn người dùng này khỏi hệ thống không?");
+    if (confirm) {
+      const response = await fetch(`http://localhost:5555/user/${userId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      const data = await response.json()
+      if (data) {
+        setIsSuccess(true)
+      }
+      // return alert(data.message)
+    }
+  }
 
   useEffect(() => {
     setIsSuccess(false)
@@ -52,55 +88,51 @@ const Users = () => {
             <tbody>
               {isLoading ? (
                 <tr>
-                  <td colSpan={5}>
+                  <td colSpan={8}>
                     <LoadingSpinner col width={32} height={32} className=""/>
                   </td>
                 </tr>
               ) : (
-                users.map((user, index) => {
+                users
+                .sort((a, b) => a.info.name.localeCompare(b.info.name))
+                .map((user, index) => {
                   return (
                     <tr 
                       key={index} 
-                      className={ !user.name.toLowerCase().includes(searchText.toLowerCase()) && "hidden" }
+                      className={ !user.info.name.toLowerCase().includes(searchText.toLowerCase()) && "hidden" }
                     >
                       <td className="border-y border-primaryColor/40">
                         <input type="checkbox" id={`checkbox-${index}`} className="h-4 w-4"/>
                       </td>
                       <td className="border-y border-primaryColor/40">{index + 1}</td>
-                      <td className="border-y border-primaryColor/40">{user.student_id || (<span className="italic text-orange-600">Chưa cập nhật</span>)}</td>
-                      <td className="border-y border-primaryColor/40">{user.name}</td>
-                      <td className="border-y border-primaryColor/40">Email</td>
-                      <td className="border-y border-primaryColor/40">{user.major || (<span className="italic text-orange-600">Chưa cập nhật</span>)}</td>
-                      <td className="border-y border-primaryColor/40">{user.createdAt}</td>
+                      <td className="border-y border-primaryColor/40">{user.info.student_id || (<span className="italic text-orange-600">Chưa cập nhật</span>)}</td>
+                      <td className="border-y border-primaryColor/40">{user.info.name}</td>
+                      <td className="border-y border-primaryColor/40">{user.email}</td>
+                      <td className="border-y border-primaryColor/40">{user.info.major || (<span className="italic text-orange-600">Chưa cập nhật</span>)}</td>
+                      <td className="border-y border-primaryColor/40">{user.info.createdAt}</td>
                       <td className="border-y border-primaryColor/40">
-                        {user.is_active ? (
-                          <span className="flex items-center justify-center"><BsDot className="text-4xl text-green-500"/></span>
+                        {user.is_restricted ? (
+                          <span className="flex items-center justify-center" title="Bị khóa tài khoản"><TbLock className="text-xl text-gray-700"/></span>
                         ) : (
-                          <span className="flex items-center justify-center"><BsDot className="text-4xl text-red-500"/></span>
+                          user.info.is_active ? (
+                          <span className="flex items-center justify-center" title="Online"><BsDot className="text-4xl text-green-500"/></span>
+                        ) : (
+                          <span className="flex items-center justify-center" title="Offline"><BsDot className="text-4xl text-red-500"/></span>
+                        )
                         )}
                       </td>
-                      <td className="border-y border-primaryColor/40 flex gap-4 justify-center">
-                        <button className="p-2">
-                          <MdEdit 
-                            className="text-xl" 
-                            title="Chỉnh sửa thông tin"  
-                            // onClick={() => {
-                            // setMajorItem(major);
-                            // setIsEditing(true);
-                            // }}
-                          />
-                        </button>
+                      <td className="border-y border-primaryColor/40">
                         <button 
-                          className="p-2" 
-                          title="Tạm cấm tài khoản"
-                          // onClick={() => handleDelete(major._id)}
+                          className="p-2 mr-4" 
+                          title={user.is_restricted ? "Mở khóa tài khoản" : "Tạm cấm tài khoản"}
+                          onClick={() => handleRestrict(user.info._id, user.is_restricted)}
                         >
-                          <MdBlock className="text-xl"/>
+                          {user.is_restricted ? (<TbLockOpenOff className="text-xl"/>) : (<MdBlock className="text-xl"/>)}
                         </button>
                         <button 
                           className="p-2" 
                           title="Xóa vĩnh viễn"
-                          // onClick={() => handleDelete(major._id)}
+                          onClick={() => handleDelete(user.info._id)}
                         >
                           <MdDelete className="text-xl"/>
                         </button>
@@ -112,36 +144,6 @@ const Users = () => {
               )}
             </tbody>
           </table>
-          {/* {isEditing && (
-            <div className="fixed z-20 left-0 top-0 right-0 bottom-0 bg-gray-500/10 text-center">
-              <div className="mx-auto my-10 w-fit min-h-40 py-4 px-6 bg-white rounded-lg">
-                <h1 className="font-semibold text-xl">Sửa thông tin chuyên ngành</h1>
-                <div className="mt-4 flex justify-center gap-1">
-                  <span>Tên chuyên ngành:</span>
-                  <input 
-                    type="text" 
-                    value={majorItem.name} 
-                    onChange={(e) => setMajorItem({ _id: majorItem._id, name: e.target.value })}
-                    className="bg-primaryColor/20 px-2 rounded-md"
-                  />
-                </div>
-                <div className="mt-5 float-right">
-                  <button 
-                    onClick={() => setIsEditing(false)}
-                    className="bg-red-500 px-4 py-2 font-medium text-white rounded-md mr-2 hover:bg-red-400"
-                  >
-                    Hủy
-                  </button>
-                  <button 
-                    onClick={handleEdit}
-                    className="bg-primaryColor px-4 py-2 font-medium text-white rounded-md hover:bg-primaryColor/80"
-                  >
-                    Lưu
-                  </button>
-                </div>
-              </div>
-            </div>
-          )} */}
         </div>
       </div>
     </div>

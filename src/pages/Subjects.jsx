@@ -144,7 +144,9 @@ const Subjects = () => {
                   </td>
                 </tr>
               ) : (
-                subjects.map((subject, index) => (
+                subjects
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((subject, index) => (
                   <tr 
                     key={index} 
                     className={ !subject.name.toLowerCase().includes(searchText.toLowerCase()) && "hidden" }
