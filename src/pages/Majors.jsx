@@ -14,7 +14,7 @@ const Majors = () => {
   const [isCreating, setIsCreating] = useState(false);
 
   const handleCreate = async () => {
-    const response = await fetch("http://localhost:5555/major", {
+    const response = await fetch("https://stuto-api.onrender.com/major", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -32,7 +32,7 @@ const Majors = () => {
   }
 
   const handleEdit = async () => {
-    const response = await fetch(`http://localhost:5555/major/${majorItem._id}`, {
+    const response = await fetch("https://stuto-api.onrender.com/major/" + majorItem._id, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
@@ -52,7 +52,7 @@ const Majors = () => {
   const handleDelete = async (id) => {
     const result = window.confirm("Bạn có chắc muốn xóa chuyên ngành này không?");
     if (result) {
-      const response = await fetch(`http://localhost:5555/major/${id}`, {
+      const response = await fetch("https://stuto-api.onrender.com/major/" + id, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json"
@@ -69,7 +69,7 @@ const Majors = () => {
   useEffect(() => {
     setIsSuccess(false)
     setIsLoading(true)
-    fetch("http://localhost:5555/major")
+    fetch("https://stuto-api.onrender.com/major")
       .then((response) => response.json())
       .then((majorsData) => setMajors(majorsData.data))
       .then(() => setIsLoading(false))

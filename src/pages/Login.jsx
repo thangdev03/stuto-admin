@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useAuthContext } from "../hooks/useAuthContext";
+import { setLogIn } from "../contexts/AuthContext"
 import { FaRegUser } from "react-icons/fa6";
 import { MdLockOutline } from "react-icons/md";
 
@@ -8,12 +10,13 @@ function Login() {
     const [email, setEmail] = useState("");        
     const [password, setPassword] = useState("");
     const [checkingAccount, setCheckingAccount] = useState(false);
+    const [state, dispatch] = useAuthContext();
 
     const handleLogin = async (event) => {
       event.preventDefault();
       setCheckingAccount(true);
 
-      const response = await fetch("http://localhost:5555/account/login", {
+      const response = await fetch("https://stuto-api.onrender.com/account/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -29,11 +32,10 @@ function Login() {
         setCheckingAccount(false)
       }
       if (data.token && data.role === "admin") {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("username", data.name);
-        console.log("LOGIN SUCCESS")
-        alert("Chào mừng " + data.name + " đã quay trở lại StuTo Management");
-        return window.location.href = "/";
+        localStorage.setItem("user", JSON.stringify(data))
+        dispatch(setLogIn(data))
+        return alert("Chào mừng " + data.name + " đã quay trở lại StuTo Management");
+        // return window.location.href = "/";
       } else {
         return alert("Vui lòng kiểm tra lại email và mật khẩu của bạn");
       }

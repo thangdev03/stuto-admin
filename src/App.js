@@ -7,6 +7,7 @@ import Reports from "./pages/Reports";
 import Subjects from "./pages/Subjects";
 import Users from "./pages/Users";
 import Navbar from "./components/Navbar";
+import { useAuthContext } from "./hooks/useAuthContext";
 
 function App() {
   const { pathname } = useLocation();

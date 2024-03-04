@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useLogOut } from "../hooks/useLogOut";
+import { useAuthContext } from "../hooks/useAuthContext";
 import { Link } from "react-router-dom";
 import { FaRegBell } from "react-icons/fa";
 import { IoMdArrowDropdown } from "react-icons/io";
@@ -8,7 +10,10 @@ const Navbar = ({ currentPath }) => {
   const [isOpenNotiModal, setIsOpenNotiModal] = useState(false);
   const userModalContainer = useRef();
   const notiModalContainer = useRef();
-  const username = localStorage.getItem("username");
+  // const username = localStorage.getItem("username");
+  const { logout } = useLogOut();
+  const [state, dispatch] = useAuthContext();
+  const { user } = state;
   
   const handleOutsideClick = (e) => {
     if (userModalContainer.current && !userModalContainer.current.contains(e.target)) {
@@ -17,6 +22,10 @@ const Navbar = ({ currentPath }) => {
     if (notiModalContainer.current && !notiModalContainer.current.contains(e.target)) {
       setIsOpenNotiModal(false);
     }
+  }
+
+  const handleLogoutClick = () => {
+    logout();
   }
 
   useEffect(() => {
@@ -46,31 +55,31 @@ const Navbar = ({ currentPath }) => {
       </Link>
       <div className="flex gap-1">
         <Link
-          className={` px-4 leading-[4rem] font-semibold border-b-2 transition-all hover:text-primaryColor ${currentPath === '/' && "text-primaryColor border-b-[#918ee7]"}`}
+          className={` px-4 leading-[4rem] font-semibold border-b-2 border-b-transparent transition-all hover:text-primaryColor ${currentPath === '/' && "text-primaryColor border-b-current border-b-[#918ee7]"}`}
           to="/"
         >
           Tổng quát
         </Link>
         <Link
-          className={` px-4 leading-[4rem] font-semibold border-b-2 transition-all hover:text-primaryColor ${currentPath === '/users' && "text-primaryColor border-b-[#918ee7]"}`}
+          className={` px-4 leading-[4rem] font-semibold border-b-2 border-b-transparent transition-all hover:text-primaryColor ${currentPath === '/users' && "text-primaryColor border-b-current border-b-[#918ee7]"}`}
           to="/users"
         >
           QL Người dùng
         </Link>
         <Link
-          className={` px-4 leading-[4rem] font-semibold border-b-2 transition-all hover:text-primaryColor ${currentPath === '/majors' && "text-primaryColor border-b-[#918ee7]"}`}
+          className={` px-4 leading-[4rem] font-semibold border-b-2 border-b-transparent transition-all hover:text-primaryColor ${currentPath === '/majors' && "text-primaryColor border-b-current border-b-[#918ee7]"}`}
           to="/majors"
         >
           QL Chuyên ngành
         </Link>
         <Link
-          className={` px-4 leading-[4rem] font-semibold border-b-2 transition-all hover:text-primaryColor ${currentPath === '/subjects' && "text-primaryColor border-b-[#918ee7]"}`}
+          className={` px-4 leading-[4rem] font-semibold border-b-2 border-b-transparent transition-all hover:text-primaryColor ${currentPath === '/subjects' && "text-primaryColor border-b-current border-b-[#918ee7]"}`}
           to="/subjects"
         >
           QL Môn học
         </Link>
         <Link
-          className={` px-4 leading-[4rem] font-semibold border-b-2 transition-all hover:text-primaryColor ${currentPath === '/reports' && "text-primaryColor border-b-[#918ee7]"}`}
+          className={` px-4 leading-[4rem] font-semibold border-b-2 border-b-transparent transition-all hover:text-primaryColor ${currentPath === '/reports' && "text-primaryColor border-b-current border-b-[#918ee7]"}`}
           to="/reports"
         >
           Xử lý báo cáo
@@ -97,27 +106,32 @@ const Navbar = ({ currentPath }) => {
           </ul>
         </div>
         <div className="h-8 border-2 border-l-gray-300"></div>
-        <div
-          onClick={(e) => setIsOpenUserModal(!isOpenUserModal)}
-          className="relative w-36 font-medium cursor-pointer"
-          ref={userModalContainer}
-        >
-          <p className="flex gap-1 justify-center items-center leading-[4rem]">
-            {username} <IoMdArrowDropdown />
-          </p>
-          <ul
-            className={`absolute top-[80%] right-0 w-36 bg-white text-center text-sm rounded-lg shadow-sm overflow-hidden py-2 font-normal ${
-              isOpenUserModal ? "block" : "hidden"
-            }`}
+        {user && (
+          <div
+            onClick={(e) => setIsOpenUserModal(!isOpenUserModal)}
+            className="relative w-36 font-medium cursor-pointer"
+            ref={userModalContainer}
           >
-            <li className="py-3 hover:text-white hover:bg-[#918ee7]">
-              Thêm admin
-            </li>
-            <li className="py-3 hover:text-white hover:bg-[#918ee7]">
-              Đăng xuất
-            </li>
-          </ul>
-        </div>
+            <p className="flex gap-1 justify-center items-center leading-[4rem]">
+              {user.name} <IoMdArrowDropdown />
+            </p>
+            <ul
+              className={`absolute top-[80%] right-0 w-36 bg-white text-center text-sm rounded-lg shadow-sm overflow-hidden py-2 font-normal ${
+                isOpenUserModal ? "block" : "hidden"
+              }`}
+            >
+              <li className="py-3 hover:text-white hover:bg-[#918ee7]">
+                Thêm admin
+              </li>
+              <li
+                onClick={handleLogoutClick} 
+                className="py-3 hover:text-white hover:bg-[#918ee7]"
+              >
+                Đăng xuất
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );

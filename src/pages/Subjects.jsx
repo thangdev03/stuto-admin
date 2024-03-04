@@ -14,7 +14,7 @@ const Subjects = () => {
   const [isCreating, setIsCreating] = useState(false);
 
   const handleCreate = async () => {
-    const response = await fetch("http://localhost:5555/subject", {
+    const response = await fetch("https://stuto-api.onrender.com/subject", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -32,7 +32,7 @@ const Subjects = () => {
   }
 
   const handleEdit = async () => {
-    const response = await fetch(`http://localhost:5555/subject/${subjectItem._id}`, {
+    const response = await fetch("https://stuto-api.onrender.com/subject/" + subjectItem._id, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
@@ -52,7 +52,7 @@ const Subjects = () => {
   const handleDelete = async (id) => {
     const result = window.confirm("Bạn có chắc muốn xóa chuyên ngành này không?");
     if (result) {
-      const response = await fetch(`http://localhost:5555/subject/${id}`, {
+      const response = await fetch("https://stuto-api.onrender.com/subject/" + subjectItem._id, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json"
@@ -69,7 +69,7 @@ const Subjects = () => {
   useEffect(() => {
     setIsSuccess(false)
     setIsLoading(true)
-    fetch("http://localhost:5555/subject")
+    fetch("https://stuto-api.onrender.com/subject")
       .then((response) => response.json())
       .then((subjectsData) => setSubjects(subjectsData.data))
       .then(() => setIsLoading(false))
