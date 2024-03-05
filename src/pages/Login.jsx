@@ -3,6 +3,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { setLogIn } from "../contexts/AuthContext"
 import { FaRegUser } from "react-icons/fa6";
 import { MdLockOutline } from "react-icons/md";
+import { Navigate } from "react-router-dom";
 
 function Login() {
     const [emailFocus, setEmailFocus] = useState(false);        
@@ -11,6 +12,7 @@ function Login() {
     const [password, setPassword] = useState("");
     const [checkingAccount, setCheckingAccount] = useState(false);
     const [state, dispatch] = useAuthContext();
+    const { user } = state;
 
     const handleLogin = async (event) => {
       event.preventDefault();
@@ -34,14 +36,14 @@ function Login() {
       if (data.token && data.role === "admin") {
         localStorage.setItem("user", JSON.stringify(data))
         dispatch(setLogIn(data))
-        return alert("Chào mừng " + data.name + " đã quay trở lại StuTo Management");
-        // return window.location.href = "/";
+        alert("Chào mừng " + data.name + " đã quay trở lại StuTo Management");
+        return window.location.href = "/";
       } else {
         return alert("Vui lòng kiểm tra lại email và mật khẩu của bạn");
       }
     }
 
-  return (
+  return user ? <Navigate to="/" /> : (
     <div className="bg-[url('https://colorlib.com/etc/lf/Login_v4/images/bg-01.jpg')] h-screen bg-no-repeat bg-cover pt-20">
       {checkingAccount && (
         <div className="fixed z-20 right-0 top-0 left-0 bottom-0 pt-10 bg-[#333333]/[.3]">
