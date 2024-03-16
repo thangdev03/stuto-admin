@@ -10,6 +10,9 @@ const Users = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [users, setUsers] = useState([]);
+  //For pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage] = useState(15);
 
   const handleRestrict = async (userId, status) => {
     const response = await fetch("https://stuto-api.onrender.com/account", {
@@ -33,7 +36,8 @@ const Users = () => {
   const handleDelete = async (userId) => {
     const confirm = window.confirm("Bạn có chắc muốn xóa vĩnh viễn người dùng này khỏi hệ thống không?");
     if (confirm) {
-      const response = await fetch("https://stuto-api.onrender.com/user/" + userId, {
+      // const response = await fetch("https://stuto-api.onrender.com/user/" + userId, {
+      const response = await fetch("http://localhost:5555/user/" + userId, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json"
@@ -47,10 +51,24 @@ const Users = () => {
     }
   }
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const filteredUsers = users?.filter(user => user.info.name.toLowerCase().includes(searchText.toLowerCase()));
+  // Calculate pagination indexes
+  const indexOfLastUser = currentPage * rowsPerPage;
+  const indexOfFirstUser = indexOfLastUser - rowsPerPage;
+  let currentUsers = users?.slice(indexOfFirstUser, indexOfLastUser);
+  if (searchText) {
+    currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+  }
+
   useEffect(() => {
     setIsSuccess(false)
     setIsLoading(true)
-    fetch("https://stuto-api.onrender.com/user")
+    // fetch("https://stuto-api.onrender.com/user")
+    fetch("http://localhost:5555/user")
       .then((response) => response.json())
       .then((usersData) => setUsers(usersData.data))
       .then(() => setIsLoading(false))
@@ -89,27 +107,27 @@ const Users = () => {
               {isLoading ? (
                 <tr>
                   <td colSpan={8}>
-                    <LoadingSpinner col width={32} height={32} className=""/>
+                    <LoadingSpinner col width={32} height={32}/>
                   </td>
                 </tr>
-              ) : (
-                users
+              ) : (currentUsers &&
+                currentUsers
                 .sort((a, b) => a.info.name.localeCompare(b.info.name))
                 .map((user, index) => {
                   return (
                     <tr 
                       key={index} 
-                      className={ !user.info.name.toLowerCase().includes(searchText.toLowerCase()) && !user.email.toLowerCase().includes(searchText.toLowerCase()) && "hidden" }
+                      className={ !user.info.name.toLowerCase().includes(searchText.toLowerCase()) && !user.email.toLowerCase().includes(searchText.toLowerCase()) ? "hidden" : undefined }
                     >
                       <td className="border-y border-primaryColor/40">
                         <input type="checkbox" id={`checkbox-${index}`} className="h-4 w-4"/>
                       </td>
-                      <td className="border-y border-primaryColor/40">{index + 1}</td>
+                      <td className="border-y border-primaryColor/40">{(index + 1).toString()}</td>
                       <td className="border-y border-primaryColor/40">{user.info.student_id || (<span className="italic text-orange-600">Chưa cập nhật</span>)}</td>
                       <td className="border-y border-primaryColor/40">{user.info.name}</td>
                       <td className="border-y border-primaryColor/40">{user.email}</td>
-                      <td className="border-y border-primaryColor/40">{user.info.major || (<span className="italic text-orange-600">Chưa cập nhật</span>)}</td>
-                      <td className="border-y border-primaryColor/40">{user.info.createdAt}</td>
+                      <td className="border-y border-primaryColor/40">{user.info.major?.name || (<span className="italic text-orange-600">Chưa cập nhật</span>)}</td>
+                      <td className="border-y border-primaryColor/40">{user.info.createdAt.split("T")[0]}</td>
                       <td className="border-y border-primaryColor/40">
                         {user.is_restricted ? (
                           <span className="flex items-center justify-center" title="Bị khóa tài khoản"><TbLock className="text-xl text-gray-700"/></span>
@@ -144,6 +162,23 @@ const Users = () => {
               )}
             </tbody>
           </table>
+          <div className="mt-4 flex justify-center items-center gap-4">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`px-3 py-1 bg-primaryColor text-white font-semibold rounded-md mr-2 ${currentPage === 1 ? "bg-gray-500" : "hover:bg-primaryColor/80"}`}
+            >
+              Prev
+            </button>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentUsers?.length < rowsPerPage || currentPage === Math.ceil(filteredUsers?.length / rowsPerPage)}
+              className={`px-3 py-1 bg-primaryColor text-white font-semibold rounded-md
+              ${currentUsers?.length < rowsPerPage || currentPage === Math.ceil(filteredUsers?.length / rowsPerPage) ? "bg-gray-500" : "hover:bg-primaryColor/80"}`}
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>

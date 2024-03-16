@@ -13,12 +13,12 @@ const SET_LOG_OUT = "log_out";
 // Actions
 const setLogIn = (payload) => ({
   type: SET_LOG_IN,
-  payload,
+  payload
 });
 
 const setLogOut = (payload) => ({
   type: SET_LOG_OUT,
-  payload,
+  payload
 });
 
 const authReducer = (state, action) => {

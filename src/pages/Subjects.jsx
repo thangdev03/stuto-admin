@@ -12,23 +12,39 @@ const Subjects = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  //For pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage] = useState(15);
 
-  const handleCreate = async () => {
-    const response = await fetch("https://stuto-api.onrender.com/subject", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        name: newSubjectName
-      })
-    });
-    const data = await response.json();
-    if (data) {
-      setIsSuccess(true);
-      setIsCreating(false);
+  const handleCreate = async (event) => {
+    event.preventDefault();
+    setIsSuccess(false);
+    setIsCreating(true);
+    if (!newSubjectName) {
+      return alert("Điền tên chuyên ngành phù hợp để thêm mới");
     }
-    // return alert(data);
+    if (subjects.find(subject => subject.name === newSubjectName)) {
+      return alert("Đã có chuyên ngành này trên hệ thống!");
+    }
+    try {
+      const response = await fetch("https://stuto-api.onrender.com/subject", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: newSubjectName
+        })
+      });
+      const data = await response.json();
+      if (data) {
+        setIsSuccess(true);
+        setIsCreating(false);
+        setNewSubjectName("");
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const handleEdit = async () => {
@@ -46,7 +62,6 @@ const Subjects = () => {
       setIsSuccess(true);
       setIsEditing(false);
     }
-    // return alert(data.message);
   }
 
   const handleDelete = async (id) => {
@@ -64,6 +79,19 @@ const Subjects = () => {
       }
       // return alert(data.message)
     }
+  }
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const filteredSubjects = subjects.filter(major => major.name.toLowerCase().includes(searchText.toLowerCase()));
+  // Calculate pagination indexes
+  const indexOfLastSubject = currentPage * rowsPerPage;
+  const indexOfFirstSubject = indexOfLastSubject - rowsPerPage;
+  let currentSubjects = subjects.slice(indexOfFirstSubject, indexOfLastSubject);
+  if (searchText) {
+    currentSubjects = filteredSubjects.slice(indexOfFirstSubject, indexOfLastSubject);
   }
   
   useEffect(() => {
@@ -106,7 +134,7 @@ const Subjects = () => {
                     Hủy
                   </button>
                   <button 
-                    onClick={handleCreate}
+                    onClick={(e) => handleCreate(e)}
                     className="bg-primaryColor px-4 py-2 font-medium text-white rounded-md hover:bg-primaryColor/80"
                   >
                     Lưu
@@ -124,7 +152,7 @@ const Subjects = () => {
         />
       </div>
       <div className="mt-5 rounded-lg overflow-hidden border border-primaryColor/60">
-        <div className="pb-8 bg-primaryColor/10">
+        <div className="pb-4 bg-primaryColor/10">
           <table className="w-full border-collapse text-center table-auto">
             <thead className="bg-primaryColor text-white">
               <tr>
@@ -144,17 +172,17 @@ const Subjects = () => {
                   </td>
                 </tr>
               ) : (
-                subjects
+                currentSubjects
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((subject, index) => (
                   <tr 
                     key={index} 
-                    className={ !subject.name.toLowerCase().includes(searchText.toLowerCase()) && "hidden" }
+                    className={ !subject.name.toLowerCase().includes(searchText.toLowerCase()) ? "hidden" : undefined }
                   >
                     <td className="border-y border-primaryColor/40">
                       <input type="checkbox" id={`checkbox-${index}`} className="h-4 w-4"/>
                     </td>
-                    <td className="border-y border-primaryColor/40">{index + 1}</td>
+                    <td className="border-y border-primaryColor/40">{(index + 1).toString()}</td>
                     <td className="border-y border-primaryColor/40">{subject.name}</td>
                     <td className="border-y border-primaryColor/40">
                       <button className="p-2 mr-4">
@@ -172,6 +200,24 @@ const Subjects = () => {
                 )}
             </tbody>
           </table>
+          <div className="mt-4 flex justify-center items-center gap-4">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`px-3 py-1 bg-primaryColor text-white font-semibold rounded-md mr-2 ${currentPage === 1 ? "bg-gray-500" : "hover:bg-primaryColor/80"}`}
+            >
+              Prev
+            </button>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentSubjects.length < rowsPerPage || currentPage === Math.ceil(filteredSubjects.length / rowsPerPage)}
+              className={`px-3 py-1 bg-primaryColor text-white font-semibold rounded-md
+              ${currentSubjects.length < rowsPerPage || currentPage === Math.ceil(filteredSubjects.length / rowsPerPage) ? "bg-gray-500" : "hover:bg-primaryColor/80"}`}
+            >
+              Next
+            </button>
+          </div>
+        </div>
           {isEditing && (
             <div className="fixed z-20 left-0 top-0 right-0 bottom-0 bg-gray-500/10 text-center">
               <div className="mx-auto my-10 w-fit min-h-40 py-4 px-6 bg-white rounded-lg">
@@ -202,7 +248,6 @@ const Subjects = () => {
               </div>
             </div>
           )}
-        </div>
       </div>
     </div>
   )

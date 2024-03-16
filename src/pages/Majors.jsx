@@ -12,41 +12,62 @@ const Majors = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  //For pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage] = useState(15);
 
-  const handleCreate = async () => {
-    const response = await fetch("https://stuto-api.onrender.com/major", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        name: newMajorName
-      })
-    });
-    const data = await response.json();
-    if (data) {
-      setIsSuccess(true);
-      setIsCreating(false);
+  const handleCreate = async (event) => {
+    event.preventDefault();
+    setIsSuccess(false);
+    setIsCreating(true);
+    if (!newMajorName) {
+      return alert("Điền tên chuyên ngành phù hợp để thêm mới");
     }
-    // return alert(data);
+    if (majors.find(major => major.name === newMajorName)) {
+      return alert("Đã có chuyên ngành này trên hệ thống!");
+    }
+    try {
+      const response = await fetch("https://stuto-api.onrender.com/major", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: newMajorName
+        })
+      });
+      const data = await response.json();
+      if (data) {
+        setIsSuccess(true);
+        setIsCreating(false);
+        setNewMajorName("");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const handleEdit = async () => {
-    const response = await fetch("https://stuto-api.onrender.com/major/" + majorItem._id, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        name: majorItem.name
-      })
-    });
-    const data = await response.json();
-    if (data) {
-      setIsSuccess(true);
-      setIsEditing(false);
+    setIsSuccess(false);
+    setIsEditing(true);
+    try {
+      const response = await fetch("https://stuto-api.onrender.com/major/" + majorItem._id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: majorItem.name
+        })
+      });
+      const data = await response.json();
+      if (data) {
+        setIsSuccess(true);
+        setIsEditing(false);
+      }
+    } catch (error) {
+      console.error(error);
     }
-    // return alert(data.message);
   }
 
   const handleDelete = async (id) => {
@@ -64,6 +85,19 @@ const Majors = () => {
       }
       // return alert(data.message)
     }
+  }
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const filteredMajors = majors.filter(major => major.name.toLowerCase().includes(searchText.toLowerCase()));
+  // Calculate pagination indexes
+  const indexOfLastMajor = currentPage * rowsPerPage;
+  const indexOfFirstMajor = indexOfLastMajor - rowsPerPage;
+  let currentMajors = majors.slice(indexOfFirstMajor, indexOfLastMajor);
+  if (searchText) {
+    currentMajors = filteredMajors.slice(indexOfFirstMajor, indexOfLastMajor);
   }
   
   useEffect(() => {
@@ -106,7 +140,7 @@ const Majors = () => {
                     Hủy
                   </button>
                   <button 
-                    onClick={handleCreate}
+                    onClick={(e) => handleCreate(e)}
                     className="bg-primaryColor px-4 py-2 font-medium text-white rounded-md hover:bg-primaryColor/80"
                   >
                     Lưu
@@ -124,7 +158,7 @@ const Majors = () => {
         />
       </div>
       <div className="mt-5 rounded-lg overflow-hidden border border-primaryColor/60">
-        <div className="pb-8 bg-primaryColor/10">
+        <div className="pb-4 bg-primaryColor/10">
           <table className="w-full border-collapse text-center table-auto">
             <thead className="bg-primaryColor text-white">
               <tr>
@@ -141,21 +175,21 @@ const Majors = () => {
               {isLoading ? (
                 <tr>
                   <td colSpan={5}>
-                    <LoadingSpinner col width={32} height={32} className=""/>
+                    <LoadingSpinner col width={32} height={32}/>
                   </td>
                 </tr>
               ) : (
-                majors
+                currentMajors
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((major, index) => (
                   <tr 
                     key={index} 
-                    className={ !major.name.toLowerCase().includes(searchText.toLowerCase()) && "hidden" }
+                    className={ !major.name.toLowerCase().includes(searchText.toLowerCase()) ? "hidden" : undefined }
                   >
                     <td className="border-y border-primaryColor/40">
                       <input type="checkbox" id={`checkbox-${index}`} className="h-4 w-4"/>
                     </td>
-                    <td className="border-y border-primaryColor/40">{index + 1}</td>
+                    <td className="border-y border-primaryColor/40">{(index + 1).toString()}</td>
                     <td className="border-y border-primaryColor/40">{major.name}</td>
                     <td className="border-y border-primaryColor/40">35</td>
                     <td className="border-y border-primaryColor/40">
@@ -174,37 +208,54 @@ const Majors = () => {
                 )}
             </tbody>
           </table>
-          {isEditing && (
-            <div className="fixed z-20 left-0 top-0 right-0 bottom-0 bg-gray-500/10 text-center">
-              <div className="mx-auto my-10 w-fit min-h-40 py-4 px-6 bg-white rounded-lg">
-                <h1 className="font-semibold text-xl">Sửa thông tin chuyên ngành</h1>
-                <div className="mt-4 flex justify-center gap-1">
-                  <span>Tên chuyên ngành:</span>
-                  <input 
-                    type="text" 
-                    value={majorItem.name} 
-                    onChange={(e) => setMajorItem({ _id: majorItem._id, name: e.target.value })}
-                    className="bg-primaryColor/20 px-2 rounded-md"
-                  />
-                </div>
-                <div className="mt-5 float-right">
-                  <button 
-                    onClick={() => setIsEditing(false)}
-                    className="bg-red-500 px-4 py-2 font-medium text-white rounded-md mr-2 hover:bg-red-400"
-                  >
-                    Hủy
-                  </button>
-                  <button 
-                    onClick={handleEdit}
-                    className="bg-primaryColor px-4 py-2 font-medium text-white rounded-md hover:bg-primaryColor/80"
-                  >
-                    Lưu
-                  </button>
-                </div>
+          <div className="mt-4 flex justify-center items-center gap-4">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`px-3 py-1 bg-primaryColor text-white font-semibold rounded-md mr-2 ${currentPage === 1 ? "bg-gray-500" : "hover:bg-primaryColor/80"}`}
+            >
+              Prev
+            </button>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentMajors.length < rowsPerPage || currentPage === Math.ceil(filteredMajors.length / rowsPerPage)}
+              className={`px-3 py-1 bg-primaryColor text-white font-semibold rounded-md hover:bg-primaryColor/80
+              ${currentMajors.length < rowsPerPage || currentPage === Math.ceil(filteredMajors.length / rowsPerPage) ? "bg-gray-500" : "hover:bg-primaryColor/80"}`}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+        {isEditing && (
+          <div className="fixed z-20 left-0 top-0 right-0 bottom-0 bg-gray-500/10 text-center">
+            <div className="mx-auto my-10 w-fit min-h-40 py-4 px-6 bg-white rounded-lg">
+              <h1 className="font-semibold text-xl">Sửa thông tin chuyên ngành</h1>
+              <div className="mt-4 flex justify-center gap-1">
+                <span>Tên chuyên ngành:</span>
+                <input 
+                  type="text" 
+                  value={majorItem.name} 
+                  onChange={(e) => setMajorItem({ _id: majorItem._id, name: e.target.value })}
+                  className="bg-primaryColor/20 px-2 rounded-md"
+                />
+              </div>
+              <div className="mt-5 float-right">
+                <button 
+                  onClick={() => setIsEditing(false)}
+                  className="bg-red-500 px-4 py-2 font-medium text-white rounded-md mr-2 hover:bg-red-400"
+                >
+                  Hủy
+                </button>
+                <button 
+                  onClick={handleEdit}
+                  className="bg-primaryColor px-4 py-2 font-medium text-white rounded-md hover:bg-primaryColor/80"
+                >
+                  Lưu
+                </button>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   )
