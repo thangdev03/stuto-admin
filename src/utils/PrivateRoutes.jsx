@@ -4,7 +4,8 @@ import { useAuthContext } from "../hooks/useAuthContext";
 
 const PrivateRoutes = () => {
     const user = JSON.parse(localStorage.getItem("user"));
-    return user ? <Outlet /> : <Navigate to="/login" />
+    const isAdmin = user.role == "admin";
+    return user && isAdmin ? <Outlet /> : <Navigate to="/login" />
 }
 
 export default PrivateRoutes

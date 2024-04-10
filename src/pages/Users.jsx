@@ -36,8 +36,7 @@ const Users = () => {
   const handleDelete = async (userId) => {
     const confirm = window.confirm("Bạn có chắc muốn xóa vĩnh viễn người dùng này khỏi hệ thống không?");
     if (confirm) {
-      // const response = await fetch("https://stuto-api.onrender.com/user/" + userId, {
-      const response = await fetch("http://localhost:5555/user/" + userId, {
+      const response = await fetch("https://stuto-api.onrender.com/user/" + userId, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json"
@@ -67,8 +66,7 @@ const Users = () => {
   useEffect(() => {
     setIsSuccess(false)
     setIsLoading(true)
-    // fetch("https://stuto-api.onrender.com/user")
-    fetch("http://localhost:5555/user")
+    fetch("https://stuto-api.onrender.com/user")
       .then((response) => response.json())
       .then((usersData) => setUsers(usersData.data))
       .then(() => setIsLoading(false))

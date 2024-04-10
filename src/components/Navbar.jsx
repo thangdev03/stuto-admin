@@ -58,31 +58,31 @@ const Navbar = ({ currentPath }) => {
           className={` px-4 leading-[4rem] font-semibold border-b-2 border-b-transparent transition-all hover:text-primaryColor ${currentPath === '/' && "text-primaryColor border-b-current border-b-[#918ee7]"}`}
           to="/"
         >
-          Tổng quát
+          Dashboard
         </Link>
         <Link
           className={` px-4 leading-[4rem] font-semibold border-b-2 border-b-transparent transition-all hover:text-primaryColor ${currentPath === '/users' && "text-primaryColor border-b-current border-b-[#918ee7]"}`}
           to="/users"
         >
-          QL Người dùng
+          Người dùng
         </Link>
         <Link
           className={` px-4 leading-[4rem] font-semibold border-b-2 border-b-transparent transition-all hover:text-primaryColor ${currentPath === '/majors' && "text-primaryColor border-b-current border-b-[#918ee7]"}`}
           to="/majors"
         >
-          QL Chuyên ngành
+          Chuyên ngành
         </Link>
         <Link
           className={` px-4 leading-[4rem] font-semibold border-b-2 border-b-transparent transition-all hover:text-primaryColor ${currentPath === '/subjects' && "text-primaryColor border-b-current border-b-[#918ee7]"}`}
           to="/subjects"
         >
-          QL Môn học
+          Môn học
         </Link>
         <Link
           className={` px-4 leading-[4rem] font-semibold border-b-2 border-b-transparent transition-all hover:text-primaryColor ${currentPath === '/reports' && "text-primaryColor border-b-current border-b-[#918ee7]"}`}
           to="/reports"
         >
-          Xử lý báo cáo
+          Báo cáo
         </Link>
       </div>
       <div className="flex justify-between items-center gap-3">
