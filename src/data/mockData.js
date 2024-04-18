@@ -1,305 +1,239 @@
-export const mockPieData = [
-    {
-      "id": "python",
-      "label": "python",
-      "value": 262,
-      "color": "hsl(347, 70%, 50%)"
-    },
-    {
-      "id": "lisp",
-      "label": "lisp",
-      "value": 388,
-      "color": "hsl(203, 70%, 50%)"
-    },
-    {
-      "id": "hack",
-      "label": "hack",
-      "value": 123,
-      "color": "hsl(337, 70%, 50%)"
-    },
-    {
-      "id": "go",
-      "label": "go",
-      "value": 504,
-      "color": "hsl(147, 70%, 50%)"
-    },
-    {
-      "id": "java",
-      "label": "java",
-      "value": 303,
-      "color": "hsl(290, 70%, 50%)"
-    }
-];
-
-
 export const mockBarData = [
     {
-      "id": "japan",
+      "id": "Học nhóm",
       "color": "hsl(266, 70%, 50%)",
       "data": [
         {
-          "x": "plane",
+          "x": "Thứ hai",
           "y": 294
         },
         {
-          "x": "helicopter",
+          "x": "Thứ ba",
           "y": 227
         },
         {
-          "x": "boat",
+          "x": "Thứ tư",
           "y": 157
         },
         {
-          "x": "train",
+          "x": "Thứ năm",
           "y": 171
         },
         {
-          "x": "subway",
+          "x": "Thứ sáu",
           "y": 208
         },
         {
-          "x": "bus",
+          "x": "Thứ bảy",
           "y": 96
         },
         {
-          "x": "car",
+          "x": "Chủ nhật",
           "y": 115
-        },
-        {
-          "x": "moto",
-          "y": 12
-        },
-        {
-          "x": "bicycle",
-          "y": 189
-        },
-        {
-          "x": "horse",
-          "y": 210
-        },
-        {
-          "x": "skateboard",
-          "y": 70
-        },
-        {
-          "x": "others",
-          "y": 127
         }
       ]
     },
     {
-      "id": "france",
+      "id": "Học cá nhân",
       "color": "hsl(238, 70%, 50%)",
       "data": [
         {
-          "x": "plane",
+          "x": "Thứ hai",
           "y": 4
         },
         {
-          "x": "helicopter",
+          "x": "Thứ ba",
           "y": 142
         },
         {
-          "x": "boat",
+          "x": "Thứ tư",
           "y": 206
         },
         {
-          "x": "train",
+          "x": "Thứ năm",
           "y": 60
         },
         {
-          "x": "subway",
+          "x": "Thứ sáu",
           "y": 211
         },
         {
-          "x": "bus",
+          "x": "Thứ bảy",
           "y": 223
         },
         {
-          "x": "car",
+          "x": "Chủ nhật",
           "y": 190
-        },
-        {
-          "x": "moto",
-          "y": 4
-        },
-        {
-          "x": "bicycle",
-          "y": 210
-        },
-        {
-          "x": "horse",
-          "y": 118
-        },
-        {
-          "x": "skateboard",
-          "y": 134
-        },
-        {
-          "x": "others",
-          "y": 42
         }
       ]
     },
     {
-      "id": "us",
+      "id": "Nhắn tin",
       "color": "hsl(284, 70%, 50%)",
       "data": [
         {
-          "x": "plane",
+          "x": "Thứ hai",
           "y": 78
         },
         {
-          "x": "helicopter",
+          "x": "Thứ ba",
           "y": 261
         },
         {
-          "x": "boat",
+          "x": "Thứ tư",
           "y": 150
         },
         {
-          "x": "train",
+          "x": "Thứ năm",
           "y": 212
         },
         {
-          "x": "subway",
+          "x": "Thứ sáu",
           "y": 4
         },
         {
-          "x": "bus",
+          "x": "Thứ bảy",
           "y": 15
         },
         {
-          "x": "car",
-          "y": 138
-        },
-        {
-          "x": "moto",
-          "y": 184
-        },
-        {
-          "x": "bicycle",
-          "y": 168
-        },
-        {
-          "x": "horse",
-          "y": 97
-        },
-        {
-          "x": "skateboard",
-          "y": 146
-        },
-        {
-          "x": "others",
+          "x": "Chủ nhật",
           "y": 138
         }
       ]
     },
     {
-      "id": "germany",
+      "id": "Gọi video",
       "color": "hsl(81, 70%, 50%)",
       "data": [
         {
-          "x": "plane",
+          "x": "Thứ hai",
           "y": 274
         },
         {
-          "x": "helicopter",
+          "x": "Thứ ba",
           "y": 231
         },
         {
-          "x": "boat",
+          "x": "Thứ tư",
           "y": 190
         },
         {
-          "x": "train",
+          "x": "Thứ năm",
           "y": 188
         },
         {
-          "x": "subway",
+          "x": "Thứ sáu",
           "y": 96
         },
         {
-          "x": "bus",
+          "x": "Thứ bảy",
           "y": 214
         },
         {
-          "x": "car",
+          "x": "Chủ nhật",
           "y": 151
-        },
-        {
-          "x": "moto",
-          "y": 210
-        },
-        {
-          "x": "bicycle",
-          "y": 121
-        },
-        {
-          "x": "horse",
-          "y": 233
-        },
-        {
-          "x": "skateboard",
-          "y": 297
-        },
-        {
-          "x": "others",
-          "y": 72
         }
       ]
     },
     {
-      "id": "norway",
+      "id": "Tham gia khóa học",
       "color": "hsl(85, 70%, 50%)",
       "data": [
         {
-          "x": "plane",
+          "x": "Thứ hai",
           "y": 263
         },
         {
-          "x": "helicopter",
+          "x": "Thứ ba",
           "y": 103
         },
         {
-          "x": "boat",
+          "x": "Thứ tư",
           "y": 34
         },
         {
-          "x": "train",
+          "x": "Thứ năm",
           "y": 163
         },
         {
-          "x": "subway",
+          "x": "Thứ sáu",
           "y": 197
         },
         {
-          "x": "bus",
+          "x": "Thứ bảy",
           "y": 60
         },
         {
-          "x": "car",
+          "x": "Chủ nhật",
           "y": 1
+        }
+      ]
+    },
+    {
+      "id": "Đăng bài",
+      "color": "hsl(85, 70%, 50%)",
+      "data": [
+        {
+          "x": "Thứ hai",
+          "y": 263
         },
         {
-          "x": "moto",
-          "y": 293
+          "x": "Thứ ba",
+          "y": 103
         },
         {
-          "x": "bicycle",
-          "y": 147
+          "x": "Thứ tư",
+          "y": 34
         },
         {
-          "x": "horse",
-          "y": 200
+          "x": "Thứ năm",
+          "y": 163
         },
         {
-          "x": "skateboard",
-          "y": 280
+          "x": "Thứ sáu",
+          "y": 197
         },
         {
-          "x": "others",
-          "y": 9
+          "x": "Thứ bảy",
+          "y": 60
+        },
+        {
+          "x": "Chủ nhật",
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "Tìm bạn học",
+      "color": "hsl(85, 70%, 50%)",
+      "data": [
+        {
+          "x": "Thứ hai",
+          "y": 263
+        },
+        {
+          "x": "Thứ ba",
+          "y": 103
+        },
+        {
+          "x": "Thứ tư",
+          "y": 34
+        },
+        {
+          "x": "Thứ năm",
+          "y": 163
+        },
+        {
+          "x": "Thứ sáu",
+          "y": 197
+        },
+        {
+          "x": "Thứ bảy",
+          "y": 60
+        },
+        {
+          "x": "Chủ nhật",
+          "y": 1
         }
       ]
     }

@@ -3,7 +3,7 @@ import { createContext, useReducer, useEffect } from "react";
 const AuthContext = createContext();
 
 const initState = {
-  user: null,
+  user: JSON.parse(localStorage.getItem("user")) || null,
 };
 
 // States

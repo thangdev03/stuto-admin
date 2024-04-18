@@ -50,19 +50,19 @@ const LineChart = () => {
         axisRight={null}
         axisBottom={{
             tickSize: 5,
-            tickPadding: 5,
+            tickPadding: 10,
             tickRotation: 0,
-            legend: 'transportation',
+            legend: 'Ngày trong tuần',
             legendOffset: 36,
             legendPosition: 'middle',
-            truncateTickAt: 0
+            truncateTickAt: 0,
         }}
         axisLeft={{
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
             tickValues: 5,
-            legend: 'count',
+            legend: 'Lượng người học',
             legendOffset: -40,
             legendPosition: 'middle',
             truncateTickAt: 0
@@ -74,6 +74,9 @@ const LineChart = () => {
         pointBorderWidth={2}
         pointBorderColor={{ from: 'serieColor' }}
         pointLabelYOffset={-12}
+        enableArea={false}
+        areaOpacity={0.15}
+        areaBaselineValue={50}
         enableTouchCrosshair={true}
         useMesh={true}
         legends={[

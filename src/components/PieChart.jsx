@@ -1,8 +1,7 @@
 import React from 'react'
 import { ResponsivePie } from "@nivo/pie"
-import { mockPieData as data } from "../data/mockData"
 
-const PieChart = () => {
+const PieChart = ({data}) => {
   return (
     <ResponsivePie
         data={data}
@@ -19,7 +18,7 @@ const PieChart = () => {
                 }
             },
         }}
-        margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+        margin={{ top: 40, right: 20, bottom: 80, left: 80 }}
         innerRadius={0.5}
         padAngle={0.7}
         cornerRadius={3}
@@ -52,12 +51,12 @@ const PieChart = () => {
         }}
         legends={[
             {
-                anchor: 'bottom',
-                direction: 'row',
+                anchor: 'top-left',
+                direction: 'column',
                 justify: false,
-                translateX: 0,
-                translateY: 56,
-                itemsSpacing: 0,
+                translateX: -20,
+                translateY: 12,
+                itemsSpacing: 12,
                 itemWidth: 100,
                 itemHeight: 18,
                 itemTextColor: '#898989',

@@ -191,7 +191,7 @@ const Majors = () => {
                     </td>
                     <td className="border-y border-primaryColor/40">{(index + 1).toString()}</td>
                     <td className="border-y border-primaryColor/40">{major.name}</td>
-                    <td className="border-y border-primaryColor/40">35</td>
+                    <td className="border-y border-primaryColor/40">{major.referenceCount}</td>
                     <td className="border-y border-primaryColor/40">
                       <button className="p-2 mr-4">
                         <MdEdit className="text-xl" onClick={() => {
