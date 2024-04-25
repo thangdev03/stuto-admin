@@ -43,7 +43,7 @@ function Login() {
       }
     }
 
-  return user ? <Navigate to="/" /> : (
+  return user && user.role == "admin" ? <Navigate to="/" /> : (
     <div className="bg-[url('https://colorlib.com/etc/lf/Login_v4/images/bg-01.jpg')] h-screen bg-no-repeat bg-cover pt-20">
       {checkingAccount && (
         <div className="fixed z-20 right-0 top-0 left-0 bottom-0 pt-10 bg-[#333333]/[.3]">

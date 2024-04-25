@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from "react-router-dom"
+import { Routes, Route, useLocation, Navigate } from "react-router-dom"
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Majors from "./pages/Majors";
@@ -17,14 +17,14 @@ function App() {
 
   return (
     <div className="App">
-      {user && (
+      {user && user.role == "admin" && (
         <Navbar currentPath={pathname}/>
       )}
       <Routes>
         <Route path="/login" element={<Login />}/>
 
         <Route element={<PrivateRoutes />}>
-          <Route path="/" element={<Dashboard />}/>
+          <Route path="/" element={<Dashboard />} exact/>
           <Route path="/majors" element={<Majors />}/>
           <Route path="/posts" element={<Posts />}/>
           <Route path="/reports" element={<Reports />}/>
