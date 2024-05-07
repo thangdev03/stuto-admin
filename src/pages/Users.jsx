@@ -64,14 +64,23 @@ const Users = () => {
   }
 
   useEffect(() => {
-    setIsSuccess(false)
-    setIsLoading(true)
-    fetch("https://stuto-api.onrender.com/user")
-      .then((response) => response.json())
-      .then((usersData) => setUsers(usersData.data))
-      .then(() => setIsLoading(false))
+    const loadUsers = async () => {
+      try {
+        setIsSuccess(false)
+        setIsLoading(true)
+        const response = await fetch("https://stuto-api.onrender.com/user?limit=1000")
+        const data = await response.json();
+        console.log(data.paginatedUsers?.users)
+        setUsers(data.paginatedUsers?.users)
+        setIsLoading(false)
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    loadUsers();
   }, [isSuccess])
-  
+
   return (
     <div className="mt-16 py-10 px-10">
       <div className="flex gap-2">
